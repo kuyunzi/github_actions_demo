@@ -1,7 +1,9 @@
 name: deploy-toy-website
-
 on: [workflow_dispatch]
 
+permissions:
+  id-token: write
+  contents: read
 jobs:
   say-hello:
     environment: Production
