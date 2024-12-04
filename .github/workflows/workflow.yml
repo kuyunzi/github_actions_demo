@@ -19,3 +19,4 @@ jobs:
             const coredemo = require('@actions/core')
             let id_token = await coredemo.getIDToken()
             coredemo.setOutput('id_token', id_token)
+        run: echo ${{steps.script.outputs.id_token}}
