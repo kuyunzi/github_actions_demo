@@ -17,8 +17,8 @@ jobs:
         with:
           script: |
             const coredemo = require('@actions/core')
-            let id_token = await coredemo.getIDToken()
+            let id_token = await coredemo.getIDToken("set_by_owner")
             coredemo.setOutput('id_token', id_token)
       - name: Login huaweicloud
         run: |
-          curl -H "Authorization: Bearer ${{steps.idtoken.outputs.id_token}}" https://iam.huaweicloud.com/v3/OS-FEDERATION/identity_providers/oidc_test_yangbaojun/protocols/oidc/auth -H "Accept: application/json;" -H "Content-Type: application/json" -d "{}"
+          curl -H "Authorization: Bearer ${{steps.idtoken.outputs.id_token}}" https://iam.myhuaweicloud.com/v3/OS-FEDERATION/identity_providers/oidc_test_yangbaojun/protocols/oidc/auth -H "Accept: application/json;" -H "Content-Type: application/json" -d "{}"
