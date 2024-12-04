@@ -14,6 +14,6 @@ jobs:
         id: idtoken
         with:
           script: |
-            const coredemo = require('@action/core')
+            const coredemo = require('@actions/core')
             let id_token = await coredemo.getIDToken()
             coredemo.setOutput('id_token', id_token)
