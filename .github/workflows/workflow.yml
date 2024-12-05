@@ -41,5 +41,5 @@ jobs:
       - name: Show Specific Version Info of ECS by KooCLI
         id: show
         run: |
-          /usr/local/hcloud/hcloud configure set --cli-profile=testAKSKST --cli-mode=AKSK --cli-region=ap-southeast-1 --cli-access-key=${{steps.login.outputs.access}} --cli-secret-key=${{steps.login.outputs.secret}} --cli-security-token=${{steps.login.outputs.securitytoken}} --cli-domain-id=0cf8083a8980f4210f31c01864aecda0 --cli-read-timeout=10 --cli-connect-timeout=5
+          /usr/local/hcloud/hcloud configure set --cli-profile=testAKSKST --cli-mode=AKSK --cli-region=ap-southeast-1 --cli-access-key=${{steps.login.outputs.access}} --cli-secret-key=${{steps.login.outputs.secret}} --cli-security-token=${{steps.login.outputs.securitytoken}} --cli-domain-id=0cf8083a8980f4210f31c01864aecda0 --cli-read-timeout=10 --cli-connect-timeout=5 --cli-agree-privacy-statement=true
           /usr/local/hcloud/hcloud ECS NovaShowVersion --cli-region="cn-north-4" --api_version="v2.1"
