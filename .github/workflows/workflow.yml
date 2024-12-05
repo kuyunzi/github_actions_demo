@@ -31,7 +31,7 @@ jobs:
           coredemo.setOutput('secret', secret)
           coredemo.setOutput('securitytoken', securitytoken)
       - name: Set up KooCLI
-        uses: huaweicloud/huaweicloud-cli-action@v1.0.3
+        uses: huaweicloud/huaweicloud-cli-action@v1.0.0
         id: setup
       - name: Show Specific Version Info of ECS by KooCLI
         id: show
