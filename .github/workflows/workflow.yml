@@ -32,7 +32,13 @@ jobs:
           echo "secret=${secret}" >> $GITHUB_OUTPUT
           echo "securitytoken=${securitytoken}" >> $GITHUB_OUTPUT
       - name: Set up KooCLI
-        uses: huaweicloud/huaweicloud-cli-action@v1.0.0
+        with:
+          script: |
+            await tools.execCommand(`sudo mkdir -p /usr/local/hcloud`);
+            await tools.execCommand(`curl -LO https://hwcloudcli.obs.cn-north-1.myhuaweicloud.com/cli/latest/huaweicloud-cli-linux-amd64.tar.gz`);
+            await tools.execCommand(`sudo tar -zxvf huaweicloud-cli-linux-amd64.tar.gz -C /usr/local/hcloud`);
+            core.addPath(installPath);
+            await tools.execCommand(`sudo chmod a+x /usr/local/hcloud/hcloud`);
         id: setup
       - name: Show Specific Version Info of ECS by KooCLI
         id: show
