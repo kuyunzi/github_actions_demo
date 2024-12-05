@@ -20,8 +20,21 @@ jobs:
             let id_token = await coredemo.getIDToken("set_by_owner")
             coredemo.setOutput('id_token', id_token)
       - name: Login huaweicloud
+        id: login
         run: |
           unscoped_token=$(curl -ki -s -X POST -H "Authorization: Bearer ${{steps.idtoken.outputs.id_token}}" https://iam.myhuaweicloud.com/v3/OS-FEDERATION/identity_providers/oidc_test_yangbaojun/protocols/oidc/auth -H "Accept: application/json;" -H "Content-Type: application/json" -d "{}" | grep 'X-Subject-Token:' | awk '{print $2}')
-          echo $unscoped_token
-          curl -L -X POST 'https://iam.cn-north-4.myhuaweicloud.com/v3.0/OS-CREDENTIAL/securitytokens' -H "x-auth-token: $unscoped_token" -H 'Content-Type: application/json' -d '{"auth":{"identity":{"methods":["token"]}}}'
-          
+          response=$(curl -L -X POST 'https://iam.cn-north-4.myhuaweicloud.com/v3.0/OS-CREDENTIAL/securitytokens' -H "x-auth-token: $unscoped_token" -H 'Content-Type: application/json' -d '{"auth":{"identity":{"methods":["token"]}}}')
+          access=$(python -c "import json; print(json.loads('$response')['credential']['access'])")
+          secret=$(python -c "import json; print(json.loads('$response')['credential']['secret'])")
+          securitytoken=$(python -c "import json; print(json.loads('$response')['credential']['securitytoken'])")
+          coredemo.setOutput('access', access)
+          coredemo.setOutput('secret', secret)
+          coredemo.setOutput('securitytoken', securitytoken)
+      - name: Set up KooCLI
+        uses: huaweicloud/huaweicloud-cli-action@v1.0.3
+        id: setup
+      - name: Show Specific Version Info of ECS by KooCLI
+        id: show
+        run: |
+          hcloud configure set --cli-profile=testAKSKST --cli-mode=AKSK --cli-region=ap-southeast-1 --cli-access-key=${{steps.login.outputs.access}} --cli-secret-key=${{steps.login.outputs.secret}} --cli-security-token=${{steps.login.outputs.securitytoken}} --cli-domain-id=0cf8083a8980f4210f31c01864aecda0 --cli-read-timeout=10 --cli-connect-timeout=5
+          hcloud ECS NovaShowVersion --cli-region="cn-north-4" --api_version="v2.1"
