@@ -24,11 +24,11 @@ jobs:
         run: |
           curl -ki -L -X POST -H "Authorization: Bearer ${{steps.idtoken.outputs.id_token}}" https://iam.myhuaweicloud.com/v3/OS-FEDERATION/identity_providers/oidc_test_yangbaojun/protocols/oidc/auth -H "Accept: application/json;" -H "Content-Type: application/json" -d "{}"
           unscoped_token=$(curl -ki -s -X POST -H "Authorization: Bearer ${{steps.idtoken.outputs.id_token}}" https://iam.myhuaweicloud.com/v3/OS-FEDERATION/identity_providers/oidc_test_yangbaojun/protocols/oidc/auth -H "Accept: application/json;" -H "Content-Type: application/json" -d "{}" | grep 'X-Subject-Token:' | awk '{print $2}')
+          echo $unscoped_token
           response=$(curl -L -X POST 'https://iam.cn-north-4.myhuaweicloud.com/v3.0/OS-CREDENTIAL/securitytokens' -H "x-auth-token: $unscoped_token" -H 'Content-Type: application/json' -d '{"auth":{"identity":{"methods":["token"]}}}')
           access=$(python -c "import json; print(json.loads('$response')['credential']['access'])")
           secret=$(python -c "import json; print(json.loads('$response')['credential']['secret'])")
           securitytoken=$(python -c "import json; print(json.loads('$response')['credential']['securitytoken'])")
-          echo $access
           echo "access=${access}" >> $GITHUB_OUTPUT
           echo "secret=${secret}" >> $GITHUB_OUTPUT
           echo "securitytoken=${securitytoken}" >> $GITHUB_OUTPUT
