@@ -24,9 +24,9 @@ jobs:
         run: |
           curl -ki -L -X POST -H "Authorization: Bearer ${{steps.idtoken.outputs.id_token}}" https://iam.myhuaweicloud.com/v3/OS-FEDERATION/identity_providers/MyGitHubAction/protocols/oidc/auth -H "Accept: application/json;" -H "Content-Type: application/json" -d "{}"
           unscoped_token=$(curl -ki -s -X POST -H "Authorization: Bearer ${{steps.idtoken.outputs.id_token}}" https://iam.myhuaweicloud.com/v3/OS-FEDERATION/identity_providers/MyGitHubAction/protocols/oidc/auth -H "Accept: application/json;" -H "Content-Type: application/json" -d "{}" | grep 'X-Subject-Token:' | awk '{print $2}')
-          echo $unscoped_token
+          echo $unscoped_token >> $GITHUB_OUTPUT
           response=$(curl -L -X POST 'https://iam.cn-north-4.myhuaweicloud.com/v3.0/OS-CREDENTIAL/securitytokens' -H "x-auth-token: $unscoped_token" -H 'Content-Type: application/json' -d '{"auth":{"identity":{"methods":["token"]}}}')
-          echo $response
+          echo $response >> $GITHUB_OUTPUT
           response=$(curl -L -X POST 'https://iam.cn-north-4.myhuaweicloud.com/v3.0/OS-CREDENTIAL/securitytokens' -H "x-auth-token: $unscoped_token" -H 'Content-Type: application/json' -d '{"auth":{"identity":{"methods":["assume_role"],"assume_role": {"agency_name": "ServiceAgencyForCOC"}}}')
           echo $response
           access=$(python -c "import json; print(json.loads('$response')['credential']['access'])")
