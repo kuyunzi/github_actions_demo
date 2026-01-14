@@ -57,5 +57,4 @@ jobs:
             const request = new ecs.NovaListVersionsRequest()
             const result = client.novaListVersions(request)
             const retjson = JSON.stringify(result)
-            echo "result=${result}" >> $GITHUB_OUTPUT
             echo "retjson=${retjson}" >> $GITHUB_OUTPUT
