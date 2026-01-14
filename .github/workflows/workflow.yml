@@ -1,4 +1,4 @@
-name: deploy-toy-website
+name: idp-huaweicloud
 on: [workflow_dispatch]
 
 permissions:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client
+        run: npm install @actions/core@1.6.0 @actions/http-client npm install @huaweicloud/huaweicloud-sdk-core @huaweicloud/huaweicloud-sdk-ecs
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
@@ -45,3 +45,17 @@ jobs:
         run: |
           /usr/local/hcloud/hcloud configure set --cli-profile=testAKSKST --cli-mode=AKSK --cli-region=ap-southeast-1 --cli-access-key=${{steps.login.outputs.access}} --cli-secret-key=${{steps.login.outputs.secret}} --cli-security-token=${{steps.login.outputs.securitytoken}} --cli-domain-id=0cf8083a8980f4210f31c01864aecda0 --cli-read-timeout=10 --cli-connect-timeout=5 --cli-agree-privacy-statement=true
           /usr/local/hcloud/hcloud ECS NovaShowVersion --cli-region="cn-north-4" --api_version="v2.1"
+      - name: Show ECS by SDK
+        uses: actions/github-script@v6
+        id: showsdk
+        with:
+          script: |
+            const core = require('@huaweicloud/huaweicloud-sdk-core');
+            const ecs = require("@huaweicloud/huaweicloud-sdk-ecs/v2/public-api");            
+            const credentials = new core.BasicCredentials().withAk(${{steps.login.outputs.access}}).withSk(${{steps.login.outputs.secret}}).withProjectId('06a82cfd9e80105d2fd3c0103c70f948')
+            const client = ecs.EcsClient.newBuilder().withCredential(credentials).withEndpoint('https://iam.cn-north-4.myhuaweicloud.com').build()
+            const request = new ecs.NovaListVersionsRequest()
+            const result = client.novaListVersions(request)
+            const retjson = JSON.stringify(result)
+            echo $result >> $GITHUB_OUTPUT
+            echo $retjson >> $GITHUB_OUTPUT
