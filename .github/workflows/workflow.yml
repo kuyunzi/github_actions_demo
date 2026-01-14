@@ -50,9 +50,9 @@ jobs:
         id: showsdk
         with:
           script: |
-            const core = require('@huaweicloud/huaweicloud-sdk-core');
+            const coresdk = require('@huaweicloud/huaweicloud-sdk-core');
             const ecs = require("@huaweicloud/huaweicloud-sdk-ecs/v2/public-api");            
-            const credentials = new core.BasicCredentials().withAk(${{steps.login.outputs.access}}).withSk(${{steps.login.outputs.secret}}).withProjectId('06a82cfd9e80105d2fd3c0103c70f948')
+            const credentials = new coresdk.BasicCredentials().withAk(${{steps.login.outputs.access}}).withSk(${{steps.login.outputs.secret}}).withProjectId('06a82cfd9e80105d2fd3c0103c70f948')
             const client = ecs.EcsClient.newBuilder().withCredential(credentials).withEndpoint('https://iam.cn-north-4.myhuaweicloud.com').build()
             const request = new ecs.NovaListVersionsRequest()
             const result = client.novaListVersions(request)
