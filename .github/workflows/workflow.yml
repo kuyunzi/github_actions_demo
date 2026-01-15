@@ -18,13 +18,13 @@ jobs:
           script: |
             const coredemo = require('@actions/core')
             let id_token = await coredemo.getIDToken("set_by_owner")
-            coredemo.setOutput('id_token', id_token)
+            echo "id_token=${id_token}" >> $GITHUB_OUTPUT
       - name: Login huaweicloud
         id: login
         run: |
           curl -ki -L -X POST -H "Authorization: Bearer ${{steps.idtoken.outputs.id_token}}" https://iam.myhuaweicloud.com/v3/OS-FEDERATION/identity_providers/MyGitHubAction/protocols/oidc/auth -H "Accept: application/json;" -H "Content-Type: application/json" -d "{}"
           unscoped_token=$(curl -ki -s -X POST -H "Authorization: Bearer ${{steps.idtoken.outputs.id_token}}" https://iam.myhuaweicloud.com/v3/OS-FEDERATION/identity_providers/MyGitHubAction/protocols/oidc/auth -H "Accept: application/json;" -H "Content-Type: application/json" -d "{}" | grep 'X-Subject-Token:' | awk '{print $2}')
-          echo $unscoped_token >> $GITHUB_OUTPUT
+          echo "unscoped=${unscoped_token}" >> $GITHUB_OUTPUT
           response=$(curl -L -X POST 'https://iam.cn-north-4.myhuaweicloud.com/v3.0/OS-CREDENTIAL/securitytokens' -H "x-auth-token: $unscoped_token" -H 'Content-Type: application/json' -d '{"auth":{"identity":{"methods":["token"]}}}')
           echo "response=${response}" >> $GITHUB_OUTPUT
           access=$(python -c "import json; print(json.loads('$response')['credential']['access'])")
