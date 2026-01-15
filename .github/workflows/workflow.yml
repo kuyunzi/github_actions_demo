@@ -69,6 +69,9 @@ jobs:
             const retjson = JSON.stringify(result)
             const coredemo = require('@actions/core')
             coredemo.setOutput('retjson', retjson)
+            const fs = require('fs')
+            const str = fs.readFileSync(process.env.TMPFILE, 'utf8')
+            console.log('Node 读到：', str)
       - name: Show SDK Result
         id: showsdkresult
         run: |
