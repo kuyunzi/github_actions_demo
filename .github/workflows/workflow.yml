@@ -72,5 +72,5 @@ jobs:
       - name: Show SDK Result
         id: showsdkresult
         run: |
-            echo "ret:${steps.showsdk.outputs.retjson}"
+            echo "ret:${{steps.showsdk.outputs.retjson}}"
             echo "${{steps.idtoken.outputs.id_token}}"
