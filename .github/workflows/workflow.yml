@@ -67,5 +67,10 @@ jobs:
             const request = new ecs.ListCloudServersRequest()
             const result = client.listCloudServers(request)
             const retjson = JSON.stringify(result)
-            echo "ret:${retjson}"
+            const coredemo = require('@actions/core')
+            coredemo.setOutput('retjson', retjson)
+      - name: Show SDK Result
+        id: showsdkresult
+        run: |
+            echo "ret:${steps.showsdk.outputs.retjson}"
             echo "${{steps.idtoken.outputs.id_token}}"
