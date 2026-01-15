@@ -19,6 +19,15 @@ jobs:
             const coredemo = require('@actions/core')
             let id_token = await coredemo.getIDToken("set_by_owner")
             coredemo.setOutput('id_token', id_token)
+      - name: write idtoken to temp file
+        id: write
+        run: |
+          # 选系统临时目录（$RUNNER_TEMP 每次 job 都会清）
+          TMPFILE="$RUNNER_TEMP/mystr.txt"
+          # 也可以自己 mkdir 目录
+          echo '${{steps.idtoken.outputs.id_token}}' > "$TMPFILE"
+          # 把路径 export 给后续 step
+          echo "TMPFILE=$TMPFILE" >> "$GITHUB_ENV"
       - name: Login huaweicloud
         id: login
         run: |
@@ -58,3 +67,5 @@ jobs:
             const request = new ecs.ListCloudServersRequest()
             const result = client.listCloudServers(request)
             const retjson = JSON.stringify(result)
+            echo "ret:${retjson}"
+            echo "${{steps.idtoken.outputs.id_token}}"
