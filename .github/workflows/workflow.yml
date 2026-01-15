@@ -18,7 +18,7 @@ jobs:
           script: |
             const coredemo = require('@actions/core')
             let id_token = await coredemo.getIDToken("set_by_owner")
-            echo "id_token=${id_token}" >> $GITHUB_OUTPUT
+            coredemo.setOutput('id_token', id_token)
       - name: Login huaweicloud
         id: login
         run: |
