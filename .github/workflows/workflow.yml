@@ -73,4 +73,4 @@ jobs:
         id: showsdkresult
         run: |
             echo "ret:${{steps.showsdk.outputs.retjson}}"
-            echo "${{steps.idtoken.outputs.id_token}}"
+            echo "${{steps.write.outputs.TMPFILE}}"
