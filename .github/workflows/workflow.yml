@@ -66,6 +66,7 @@ jobs:
             const client = ecs.EcsClient.newBuilder().withCredential(credentials).withEndpoint('https://ecs.cn-north-4.myhuaweicloud.com').build()
             const request = new ecs.ListCloudServersRequest()
             const result = client.listCloudServers(request)
+            result.then(result => {console.log("JSON.stringify(result)::" + JSON.stringify(result))}).catch(ex => {console.log("exception:" + JSON.stringify(ex));})
             const {stringify} = require('flatted');
             const retjson = stringify(result)
             console.log('retjson：', retjson)
