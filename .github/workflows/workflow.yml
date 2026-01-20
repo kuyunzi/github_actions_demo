@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install OIDC Client from Core Package
-        run: npm install @actions/core@1.6.0 @actions/http-client npm install @huaweicloud/huaweicloud-sdk-core @huaweicloud/huaweicloud-sdk-ecs uuid
+        run: npm install @actions/core@1.10.0 @actions/http-client npm install @huaweicloud/huaweicloud-sdk-core @huaweicloud/huaweicloud-sdk-ecs uuid
       - name: Get Id Token
         uses: actions/github-script@v6
         id: idtoken
