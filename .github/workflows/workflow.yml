@@ -67,6 +67,7 @@ jobs:
             const request = new ecs.ListCloudServersRequest()
             const result = client.listCloudServers(request)
             const retjson = JSON.stringify(result)
+            console.log('retjson：', retjson)
             const coredemo = require('@actions/core')
             coredemo.setOutput('retjson', retjson)
             const fs = require('fs')
