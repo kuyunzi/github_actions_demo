@@ -97,8 +97,8 @@ jobs:
         id: showIAMforidp
         with:
           script: |
-            const coresdk = require('@huaweicloud/huaweicloud-sdk-core');
-            const iam = require("@huaweicloud/huaweicloud-sdk-iam/v3/public-api");            
+            const coresdk = require('@huaweicloud/huaweicloud-sdk-core');   
+            const iam = require("@huaweicloud/huaweicloud-sdk-iam/v3/public-api");
             const domain_id = "120658a586a949e4b5b353c4ce4fd82f";
             const credentials = new core.GlobalCredentials().withIdpId('MyGitHubAction').withIdTokenFile(process.env.TMPFILE).withDomainId(domain_id)
             const client = iam.IamClient.newBuilder().withCredential(credentials).withEndpoint(endpoint).build()
