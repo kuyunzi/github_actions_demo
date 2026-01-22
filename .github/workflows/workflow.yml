@@ -92,7 +92,17 @@ jobs:
             const fs = require('fs')
             const str = fs.readFileSync(process.env.TMPFILE, 'utf8')
             console.log('Node 读到：', str)
-      - name: Show SDK Result
-        id: showsdkresult
-        run: |
-            echo "$TMPFILE"
+      - name: Show IAM Group by SDK idtoken
+        uses: actions/github-script@v6
+        id: showIAMforidp
+        with:
+          script: |
+            const coresdk = require('@huaweicloud/huaweicloud-sdk-core');
+            const iam = require("@huaweicloud/huaweicloud-sdk-iam/v3/public-api");            
+            const domain_id = "120658a586a949e4b5b353c4ce4fd82f";
+            const credentials = new core.GlobalCredentials().withIdpId('MyGitHubAction').withIdTokenFile(process.env.TMPFILE).withDomainId(domain_id)
+            const client = iam.IamClient.newBuilder().withCredential(credentials).withEndpoint(endpoint).build()
+            const request = new iam.KeystoneListGroupsRequest()
+            request.domainId = "120658a586a949e4b5b353c4ce4fd82f"
+            const result = client.keystoneListGroups(request)
+            result.then(result => {console.log("idp result::" + JSON.stringify(result))}).catch(ex => {console.log("exception:" + JSON.stringify(ex));})
